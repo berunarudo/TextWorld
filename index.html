@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>転移したのはテキスト世界だった件</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="topbar__left">
+        <p id="saveStatusText" class="save-status">保存データ未確認</p>
+        <p id="topbarTitleText" class="topbar__title">転移したのはテキスト世界だった件</p>
+        <p id="recordText" class="save-status">クリア回数: 0 / 周回: 0 / 周回SP: +0</p>
+      </div>
+      <div class="save-actions">
+        <button id="achievementButton" class="button button--small">実績</button>
+        <button id="saveButton" class="button button--small">セーブ</button>
+        <button id="loadButton" class="button button--small">ロード</button>
+        <button id="resetButton" class="button button--small button--danger">リセット</button>
+      </div>
+    </header>
+
+    <section class="content-grid">
+      <section class="panel panel--skills">
+        <div class="skill-panel-header">
+          <div>
+            <div class="skill-panel-title-row">
+              <span id="skillPanelLabel" class="label">スキル一覧</span>
+              <span id="skillSpText" class="skill-sp-text">現在SP: 5</span>
+            </div>
+            <p id="skillPanelNote" class="panel-note">SPを使って取得。戦闘中はアクティブスキルのみ使用可能。</p>
+          </div>
+        </div>
+        <div class="skill-tier-bar">
+          <div id="skillTierTabs" class="skill-tier-tabs"></div>
+          <button id="toggleSkillTierTabsButton" class="button button--small skill-tier-toggle-button">開く</button>
+        </div>
+        <div id="skillList" class="skill-list"></div>
+      </section>
+
+      <section class="center-column">
+        <section class="panel panel--battle">
+          <div id="enemyCard" class="enemy-card">
+            <div class="battle-head">
+              <span class="label">戦況</span>
+              <button id="waitButton" class="button button--small battle-wait-button">待機</button>
+            </div>
+            <div id="battleVitals" class="log-vitals battle-vitals">
+              <span>LV <strong id="logLevelText">1</strong></span>
+              <span>XP <strong id="logXpText">0 / 100</strong></span>
+              <span>HP <strong id="logHpText">10 / 10</strong></span>
+              <span>MP <strong id="logMpText">10 / 10</strong></span>
+            </div>
+            <strong id="battleText">探索中</strong>
+            <p class="battle-floor">現在エリア: <span id="areaText">森エリア</span></p>
+            <p class="battle-floor">現在階層: <span id="floorText">1階</span></p>
+            <p id="enemyText">森は静かだ。次の一歩を選べる。</p>
+          </div>
+        </section>
+
+        <section id="logPanel" class="panel panel--log">
+          <div class="log-header">
+            <span id="logHeaderLabel" class="label">テキストログ</span>
+          </div>
+          <div id="logArea" class="log-area" aria-live="polite"></div>
+        </section>
+      </section>
+
+      <section class="panel panel--skills">
+        <div class="skill-panel-header">
+          <div>
+            <span id="itemPanelLabel" class="label">アイテム一覧</span>
+            <p id="itemPanelNote" class="panel-note">戦闘中でも探索中でも使用可能。</p>
+          </div>
+        </div>
+        <div id="itemList" class="skill-list"></div>
+      </section>
+    </section>
+
+    <section class="controls">
+      <button id="advanceButton" class="button button--primary">進む</button>
+      <button id="attackButton" class="button">攻撃</button>
+      <button id="skillButton" class="button">スキル</button>
+      <button id="itemButton" class="button">アイテム</button>
+      <button id="escapeButton" class="button">ステータス</button>
+    </section>
+    <section id="eventChoicePanel" class="panel panel--event is-collapsed">
+      <span class="label">選択イベント</span>
+      <p id="eventChoiceText" class="panel-note">選択肢を選んでください。</p>
+      <div id="eventChoiceButtons" class="event-choice-buttons"></div>
+    </section>
+
+  </main>
+  <div id="battleBanner" class="battle-banner is-collapsed" aria-live="polite"></div>
+  <div id="fxToastStack" class="fx-toast-stack" aria-live="polite"></div>
+
+  <section id="titleOverlay" class="overlay-panel is-collapsed" aria-live="polite">
+    <article class="overlay-card">
+      <h2>転移したのはテキスト世界だった件</h2>
+      <p id="titleRecordText" class="panel-note">クリア回数: 0 / 周回: 0</p>
+      <label for="titleDifficultySelect" class="panel-note">難易度</label>
+      <select id="titleDifficultySelect" class="difficulty-select">
+        <option value="normal">Normal</option>
+        <option value="hard">Hard</option>
+        <option value="endless">Endless</option>
+      </select>
+      <p class="panel-note">塔の物語を続けるか、新たな一周を始めるかを選べる。</p>
+      <div class="save-actions">
+        <button id="titleContinueButton" class="button button--small">続きから</button>
+        <button id="titleNewRunButton" class="button button--small">最初から挑戦</button>
+      </div>
+    </article>
+  </section>
+
+  <section id="endingOverlay" class="overlay-panel is-collapsed" aria-live="polite">
+    <article class="overlay-card">
+      <h2 id="endingTitle">エンディング</h2>
+      <p id="endingText" class="overlay-story">物語の終わりが、次の始まりになる。</p>
+      <div class="save-actions">
+        <button id="goTitleButton" class="button button--small">タイトルへ戻る</button>
+        <button id="newCycleButton" class="button button--small button--primary">周回開始</button>
+      </div>
+    </article>
+  </section>
+
+  <section id="achievementOverlay" class="overlay-panel is-collapsed" aria-live="polite">
+    <article class="overlay-card achievement-overlay-card">
+      <h2>実績一覧</h2>
+      <p id="achievementSummaryText" class="panel-note">達成 0 / 0</p>
+      <div id="achievementList" class="achievement-list"></div>
+      <div class="save-actions">
+        <button id="closeAchievementButton" class="button button--small">閉じる</button>
+      </div>
+    </article>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
