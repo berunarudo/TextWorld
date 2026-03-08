@@ -132,7 +132,10 @@ body {
 }
 
 .battle-head {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .button.battle-wait-button {
@@ -153,6 +156,9 @@ body {
 
 .enemy-card p {
   margin: 6px 0 0;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .battle-floor {
@@ -388,12 +394,13 @@ body {
 
 .log-entry {
   margin: 0 0 12px;
-  line-height: 1.6;
+  line-height: 1.72;
   color: #dce8ff;
   padding: 10px 12px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(255, 255, 255, 0.04);
+  overflow: visible;
 }
 
 .log-entry:last-child {
@@ -855,11 +862,18 @@ body {
 }
 
 @media (max-width: 720px) {
+  body {
+    overflow: auto;
+  }
+
   .app {
     width: min(100% - 20px, 960px);
     margin: 12px auto;
-    height: calc(100vh - 24px);
+    min-height: calc(100vh - 24px);
+    height: auto;
     gap: 10px;
+    overflow: visible;
+    grid-template-rows: auto auto auto;
   }
 
   .topbar,
@@ -889,20 +903,17 @@ body {
 
   .controls {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    position: sticky;
-    bottom: 0;
-    z-index: 9;
+    position: static;
     padding: 10px;
     gap: 8px;
-    background: rgba(10, 18, 36, 0.96);
-    backdrop-filter: blur(4px);
   }
 
   .content-grid {
     grid-template-columns: 1fr;
     gap: 10px;
-    overflow: auto;
+    overflow: visible;
     padding-right: 2px;
+    height: auto;
   }
 
   .center-column {
@@ -927,31 +938,34 @@ body {
 
   .panel--skills {
     height: auto;
-    max-height: 42vh;
-    min-height: 220px;
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
   }
 
   .skill-list {
-    max-height: 30vh;
+    max-height: 28vh;
     padding-right: 2px;
     padding-bottom: 8px;
   }
 
   .panel--log {
-    min-height: 36vh;
-    max-height: 36vh;
+    min-height: 220px;
+    max-height: none;
   }
 
   .log-area {
     padding: 10px;
+    max-height: 34vh;
   }
 
   .log-entry {
     padding: 8px 10px;
     margin: 0 0 8px;
-    line-height: 1.5;
+    line-height: 1.7;
     overflow-wrap: anywhere;
     word-break: break-word;
+    overflow: visible;
   }
 
   .battle-vitals {
@@ -968,6 +982,7 @@ body {
 
   .enemy-card {
     padding: 10px 11px;
+    min-height: 0;
   }
 
   .enemy-card strong {
@@ -981,8 +996,11 @@ body {
   }
 
   .button.battle-wait-button {
-    min-height: 30px;
+    position: static;
+    min-height: 34px;
+    padding: 6px 10px;
     font-size: 0.8rem;
+    margin-left: auto;
   }
 
   .battle-banner {
@@ -1004,14 +1022,11 @@ body {
 }
 
 @media (max-width: 520px) {
-  body {
-    overflow: hidden;
-  }
-
   .app {
     width: calc(100% - 12px);
     margin: 6px auto;
-    height: calc(100vh - 12px);
+    min-height: calc(100vh - 12px);
+    height: auto;
     gap: 8px;
   }
 
@@ -1059,13 +1074,14 @@ body {
   }
 
   .panel--log {
-    min-height: 40vh;
-    max-height: 40vh;
+    min-height: 200px;
+    max-height: none;
   }
 
   .log-area {
     height: 100%;
     padding: 9px;
+    max-height: 33vh;
   }
 
   .controls {
@@ -1077,6 +1093,21 @@ body {
   .button {
     min-height: 50px;
     font-size: 0.93rem;
+  }
+
+  .battle-vitals {
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 8px;
+    font-size: 0.8rem;
+  }
+
+  .battle-floor {
+    font-size: 0.88rem;
+  }
+
+  #battleText {
+    font-size: 1rem;
+    line-height: 1.35;
   }
 
   .overlay-panel {
