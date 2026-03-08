@@ -3413,6 +3413,7 @@ const gameState = createInitialGameState();
 
 const ui = {
   appRoot: document.querySelector(".app"),
+  contentGrid: document.querySelector(".content-grid"),
   bodyRoot: document.body,
   topbarTitleText: document.getElementById("topbarTitleText"),
   battleBanner: document.getElementById("battleBanner"),
@@ -3437,6 +3438,9 @@ const ui = {
   skillPanelNote: document.getElementById("skillPanelNote"),
   itemPanelLabel: document.getElementById("itemPanelLabel"),
   itemPanelNote: document.getElementById("itemPanelNote"),
+  skillPanelSection: document.getElementById("skillPanelSection"),
+  itemPanelSection: document.getElementById("itemPanelSection"),
+  mobileActionPanel: document.getElementById("mobileActionPanel"),
   logArea: document.getElementById("logArea"),
   logHeaderLabel: document.getElementById("logHeaderLabel"),
   eventChoicePanel: document.getElementById("eventChoicePanel"),
@@ -3470,8 +3474,79 @@ const ui = {
   closeAchievementButton: document.getElementById("closeAchievementButton")
 };
 
+const mobileLayoutState = {
+  skill: { parent: null, nextSibling: null },
+  item: { parent: null, nextSibling: null }
+};
+
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function isMobileViewport() {
+  return window.matchMedia("(max-width: 768px)").matches;
+}
+
+function cachePanelOriginalPositions() {
+  if (ui.skillPanelSection && !mobileLayoutState.skill.parent) {
+    mobileLayoutState.skill.parent = ui.skillPanelSection.parentNode;
+    mobileLayoutState.skill.nextSibling = ui.skillPanelSection.nextSibling;
+  }
+  if (ui.itemPanelSection && !mobileLayoutState.item.parent) {
+    mobileLayoutState.item.parent = ui.itemPanelSection.parentNode;
+    mobileLayoutState.item.nextSibling = ui.itemPanelSection.nextSibling;
+  }
+}
+
+function restorePanelToOriginal(panelKey, panelEl) {
+  const ref = mobileLayoutState[panelKey];
+  if (!ref?.parent || !panelEl || panelEl.parentNode === ref.parent) {
+    return;
+  }
+  if (ref.nextSibling && ref.nextSibling.parentNode === ref.parent) {
+    ref.parent.insertBefore(panelEl, ref.nextSibling);
+  } else {
+    ref.parent.appendChild(panelEl);
+  }
+}
+
+function syncMobileActionPanel() {
+  cachePanelOriginalPositions();
+  const isMobile = isMobileViewport();
+  const skillPanel = ui.skillPanelSection;
+  const itemPanel = ui.itemPanelSection;
+  const host = ui.mobileActionPanel;
+  if (!skillPanel || !itemPanel || !host) {
+    return;
+  }
+
+  if (!isMobile) {
+    restorePanelToOriginal("skill", skillPanel);
+    restorePanelToOriginal("item", itemPanel);
+    host.classList.add("is-collapsed");
+    host.innerHTML = "";
+    return;
+  }
+
+  const activeKey = gameState.skillListOpen ? "skill" : (gameState.itemListOpen ? "item" : null);
+  if (!activeKey) {
+    restorePanelToOriginal("skill", skillPanel);
+    restorePanelToOriginal("item", itemPanel);
+    host.classList.add("is-collapsed");
+    host.innerHTML = "";
+    return;
+  }
+
+  host.classList.remove("is-collapsed");
+  host.innerHTML = "";
+
+  if (activeKey === "skill") {
+    host.appendChild(skillPanel);
+    restorePanelToOriginal("item", itemPanel);
+  } else {
+    host.appendChild(itemPanel);
+    restorePanelToOriginal("skill", skillPanel);
+  }
 }
 
 function isPlainObject(value) {
@@ -4381,6 +4456,7 @@ function renderItemList() {
 }
 
 function render() {
+  syncMobileActionPanel();
   updateStatus();
   updateButtons();
   renderSkillList();
@@ -5759,6 +5835,9 @@ function bindUiEvents() {
     render();
   });
   ui.newCycleButton.addEventListener("click", startNewCycle);
+  window.addEventListener("resize", () => {
+    render();
+  });
 }
 
 function initializeOpeningLogs() {

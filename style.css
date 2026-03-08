@@ -110,6 +110,10 @@ body {
   padding: 12px 14px;
 }
 
+.mobile-action-panel {
+  display: none;
+}
+
 .event-choice-buttons {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -925,11 +929,32 @@ body {
   }
 
   .content-grid > .panel--skills:first-child {
-    order: 2;
+    display: none;
   }
 
   .content-grid > .panel--skills:last-child {
-    order: 3;
+    display: none;
+  }
+
+  .mobile-action-panel {
+    display: block;
+    padding: 10px;
+  }
+
+  .mobile-action-panel.is-collapsed {
+    display: none;
+  }
+
+  .mobile-action-panel .panel--skills {
+    display: grid;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
   }
 
   .panel {
