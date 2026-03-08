@@ -865,7 +865,7 @@ body {
   100% { filter: brightness(1); }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   body {
     overflow: auto;
   }
@@ -1145,7 +1145,7 @@ body {
   }
 }
 
-@media (max-width: 900px) and (min-width: 721px) {
+@media (max-width: 900px) and (min-width: 769px) {
   .content-grid {
     grid-template-columns: minmax(220px, 300px) minmax(0, 1fr) minmax(220px, 300px);
     gap: 10px;
